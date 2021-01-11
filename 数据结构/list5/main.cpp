@@ -1,8 +1,9 @@
+//          list5
 #include "Slist.h"
 #include <bits/stdc++.h>
 using namespace std;
 
-typedef struct//TableMode, *PTableMode ,定义属性信息
+typedef struct
 {
     char sFieldName[10]; //字段名
     char sType[8];       //字段类型
@@ -12,7 +13,7 @@ typedef struct//TableMode, *PTableMode ,定义属性信息
     char bValidFlag;     //该字段是否有效，可用于以后对表中该字段的删除
 } TableMode, *PTableMode;
 
-typedef struct//Tableset , 定义表的信息
+typedef struct
 {
     char tableName[1000]; //表名
     int TableModecount;   //总字段数；
@@ -25,25 +26,23 @@ void dataInsert(Tableset *newTable, SList *s)
     SListInit(s);
     for (int i = 0; i < newTable->TableModecount; i++)
     {
-        char l_data[newTable->modeinsert[i].iSize];
+       // char l_data[newTable->modeinsert[i].iSize];
+        char * l_data=(char*)malloc(newTable->modeinsert[i].iSize);
         scanf("%s", l_data);
-        printf("--- %s ---", l_data);
         SListPushBack(s, l_data);
-        fflush(stdin);
     }
 }
-//-------------------------------------------------------------------------
+
 void printTable(Tableset *newTable, SList *s,int datalinecount){
     assert(s);
     for(int i = 0;i<newTable->TableModecount;i++){
         if (i==newTable->TableModecount-1)
-            printf("+++%s+++\n",newTable->modeinsert[i].sFieldName);
+            printf("%s\n",newTable->modeinsert[i].sFieldName);
         else
-            printf("***%s***     ",newTable->modeinsert[i].sFieldName);
+            printf("%s     ",newTable->modeinsert[i].sFieldName);
     }
     for (int t = 0; t < datalinecount; t++)
         SListPrint(s + t);
-
 }
 void createTable()
 {
@@ -73,19 +72,19 @@ void createTable()
     printf("请依次输入数据\n");
     fflush(stdin);
     for (int t = 0; t < datalinecount; t++)
-        dataInsert(newTable, s + t);    //s为元组首属性地址，s + t 为元组第t个属性的地址
-        printf("\n");
+        dataInsert(newTable, s + t);
     printTable(newTable, s,datalinecount);
 }
 
-//--------------------------------------------------------------
+
+
+
 struct SListNode *BuySListNode(SDataType data)
 {
     struct SListNode *p;
     p = (struct SListNode *)malloc(sizeof(struct SListNode));
     p->_data = data;
     p->_PNext = NULL;
-//    return p;
 }
 
 void SListInit(SList *s)
@@ -259,84 +258,70 @@ void SListRemove(SList *s, SDataType data)
     }
 }
 
-int SListSize(SList *s)
-{ //获取链表有效节点的个数
-    assert(s);
-    int count = 0;
-    PNode pCur = s->_pHead;
-    while (pCur)
-    {
-        count++;
-        pCur = pCur->_PNext;
-    }
-    return count;
+int SListSize(SList* s) {            //获取链表有效节点的个数
+ assert(s);
+ int count = 0;
+ PNode pCur = s->_pHead;
+ while (pCur) {
+  count++;
+  pCur = pCur->_PNext;
+ }
+ return count;
 }
 
-int SListEmpty(SList *s)
-{ //检测链表是否为空
-    assert(s);
-    if (s->_pHead == NULL)
-    {
-        return -1;
-    }
+int SListEmpty(SList* s) {              //检测链表是否为空
+ assert(s);
+ if (s->_pHead == NULL) {
+  return -1;
+ }
+ return 0;
+}
+
+void SListClear(SList* s) {             //清空链表
+ assert(s);
+ if (s->_pHead == NULL) {
+  return;
+ }
+ PNode pCur = s->_pHead;
+ while (pCur->_PNext) {    //循环清空链表中的节点
+  PNode Tmp = pCur->_PNext;
+  free(pCur);
+  pCur = Tmp;
+ }
+ if (pCur) {      //清空最后一个节点
+  free(pCur);
+  pCur = NULL;
+ }
+}
+
+void SListDestroy(SList* s) {            //销毁链表
+ assert(s);
+ if (s->_pHead == NULL) {
+  free(s->_pHead);
+  return;
+ }
+ while (s->_pHead) {
+  PNode Tmp = s->_pHead->_PNext;
+  free(s->_pHead);
+  s->_pHead = Tmp;
+ }
+}
+
+void SListPrint(SList* s) {             //打印链表
+ assert(s);
+ PNode pCur = s->_pHead;
+ while (pCur) {
+  printf("%s--->", pCur->_data);
+  pCur = pCur->_PNext;
+ }
+ printf("\n");
+}
+int main() {
+//    createTable();
+    SList s;
+    char l_data[]="asffasgf";
+    SListPushBack(&s, l_data);
+    SListPrint(&s);
+    system("pause");
     return 0;
-}
-
-void SListClear(SList *s)
-{ //清空链表
-    assert(s);
-    if (s->_pHead == NULL)
-    {
-        return;
-    }
-    PNode pCur = s->_pHead;
-    while (pCur->_PNext)
-    { //循环清空链表中的节点
-        PNode Tmp = pCur->_PNext;
-        free(pCur);
-        pCur = Tmp;
-    }
-    if (pCur)
-    { //清空最后一个节点
-        free(pCur);
-        pCur = NULL;
-    }
-}
-
-void SListDestroy(SList *s)
-{ //销毁链表
-    assert(s);
-    if (s->_pHead == NULL)
-    {
-        free(s->_pHead);
-        return;
-    }
-    while (s->_pHead)
-    {
-        PNode Tmp = s->_pHead->_PNext;
-        free(s->_pHead);
-        s->_pHead = Tmp;
-    }
-}
-
-void SListPrint(SList *s)//----------------------------------------------
-{ //打印链表
-    assert(s);
-    PNode pCur = s->_pHead;
-    while (pCur)
-    {
-        printf("    %s     ", pCur->_data);
-        pCur = pCur->_PNext;
-    }
-    printf("\n");
-}
-int main()
-{
-//    printf(BuySListNode("a")->_data,'\n');
-    createTable();
-//    SList s;
-//    char l_data[]="asffasgf";
-//    SListPushBack(&s, l_data);
-//    SListPrint(&s);
-    return 1;
 }

@@ -24,13 +24,12 @@ class DataType(Enum):
 
 @dataclass
 class Field:
-    FieldName: str = ''
-    FieldType: DataType = DataType.BIN
-    FieldIsPK: bool = False
-    FieldAllowNull: bool = True
+    FieldName: str
+    FieldType: DataType
+    FieldIsPK: bool
+    FieldAllowNull: bool
 
 # 这是测试
-
 # 这是测试2
 
 
@@ -250,13 +249,13 @@ def PrintTable(table: Table) -> None:
     """
     print(f'[Table : {table.TableName}]')
     for cols in table.TableField:
-        print(f"{cols.FieldName:>14}", end='')
+        print(f"{cols.FieldName:^14}", end='')
     print()
     for rows in table.TableData:
         for data in rows:
-            print(f"{data:>14}", end='')
+            print(f"{data:^14}", end='')
         print()
-    print()
+    # print('--------------')
     return
 
 
@@ -309,11 +308,13 @@ def _Test():
     PrintTable(table_1)
     PrintTable(table_2)
     PrintTable(Select(Where(From(table_1, table_2),
-                            lambda line: line['Student.No'] == line['Score.No'] and line['Score.Score'] >= 60), ['Student.No', 'Student.Name', 'Score.Score']))
+                            lambda line: line['Student.No'] == line['Score.No'] and line['Score.Score'] >= 60),
+                      ['Student.No', 'Student.Name', 'Score.Score']))
 
     # DELETE FROM table_2 WHERE table_2.Score < 90
+    print('---------------')
     PrintTable(Delete(table_2, lambda line: line['Score'] < 90))
-
+    print('---------------')
     # INSERT INTO table_2 VALUES (20012,59)
     PrintTable(Insert(table_2, (20012, 59)))
 

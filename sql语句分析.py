@@ -18,9 +18,9 @@ for stmt in stmts:
         print(' \t             type: ', type(i), '\n')
     print('-'*100)
 
-    print(re.search('update', sql))
-    print(re.search('insert', sql))
-    print(re.search('delete', sql))
+    # print(re.search('update', sql))
+    # print(re.search('insert', sql))
+    # print(re.search('delete', sql))
     parsed = sqlparse.parse(sql)
     result = sqlparse.sql.Statement(parsed[0].tokens)
     print(result.get_type())

@@ -1,0 +1,13 @@
+# depslib dependency file v1.0
+1610340631 source:i:\数据库\list5\main.cpp
+	"Slist.h"
+	<bits/stdc++.h>
+
+1610169341 i:\数据库\list5\slist.h
+
+1610344398 source:d:\大学\大三\大三上\数据库课程设计\dbms\数据结构\list5\main.cpp
+	"Slist.h"
+	<bits/stdc++.h>
+
+1610169341 d:\大学\大三\大三上\数据库课程设计\dbms\数据结构\list5\slist.h
+
